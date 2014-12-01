@@ -8,7 +8,7 @@ define([
     Backbone
   ){
 
-  "use strict";
+  'use strict';
 
 
   var ViewManager = function (options) {
@@ -151,7 +151,7 @@ define([
 
     views.each(function (index, viewEl) {
       $viewEl = $(viewEl);
-      zIndex = parseInt($viewEl.css('z-index')) || 0;
+      zIndex = parseInt($viewEl.css('z-index'), 10) || 0;
       if (zIndex > maxZIndex && viewEl !== forViewEl) {
         maxZIndex = zIndex;
       }
@@ -171,10 +171,10 @@ define([
 
     views.each(function (index, viewEl) {
       $viewEl = $(viewEl);
-      zIndex = parseInt($viewEl.css('z-index')) || 0;
+      zIndex = parseInt($viewEl.css('z-index'), 10) || 0;
       if (zIndex > maxZIndex && viewEl !== forViewEl) {
         maxZIndex = zIndex;
-        topModalViewEl = viewEl
+        topModalViewEl = viewEl;
       }
     });
 
@@ -218,7 +218,7 @@ define([
 
   ViewManager.prototype.showModal = function ($viewEl) {
 
-    var viewElZIndex = parseInt($viewEl.css('z-index')) || 0,
+    var viewElZIndex = parseInt($viewEl.css('z-index'), 10) || 0,
       $modalLayer = this.getModalLayer();
 
     if (0 === viewElZIndex) {
@@ -257,7 +257,7 @@ define([
   ViewManager.prototype.show = function (view, options) {
 
     var self = this,
-      attached = view.$el.parent().length != 0,
+      attached = view.$el.parent().length !== 0,
       $viewEl = attached ? view.$el : $(document.createElement('div'));
 
     options = options || {};
@@ -299,7 +299,7 @@ define([
 
     }
     else {
-      $viewEl.removeClass('vm-centered')
+      $viewEl.removeClass('vm-centered');
     }
 
     if (true === options.modal) {
@@ -336,8 +336,7 @@ define([
 
   ViewManager.prototype.resizeView = function ($viewEl) {
 
-    var self = this,
-      options = $viewEl.data('vm-options') || {},
+    var options = $viewEl.data('vm-options') || {},
       sizes = this.getSizes(),
       css;
 
@@ -366,7 +365,7 @@ define([
 
     if (css) {
       $viewEl.css(css);
-console.log(
+window.console.log(
   'ViewManager.resizeView(): ',
   $viewEl.get(0).firstChild && $viewEl.get(0).firstChild.className || $viewEl
 );
@@ -378,8 +377,7 @@ console.log(
 
   ViewManager.prototype.positionView = function ($viewEl) {
 
-    var self = this,
-      options = $viewEl.data('vm-options') || {},
+    var options = $viewEl.data('vm-options') || {},
       sizes = this.getSizes(),
       viewWidth = $viewEl.outerWidth(),
       viewHeight = $viewEl.outerHeight(),
@@ -388,8 +386,7 @@ console.log(
       css = {};
 
     if ('vertical' === options.center || 'both' === options.center) {
-      css.top = (availableHeight / 2 - viewHeight / 2)
-        + (true === options.fullscreen ? 0 : sizes.mainBarHeight);
+      css.top = (availableHeight / 2 - viewHeight / 2) + (true === options.fullscreen ? 0 : sizes.mainBarHeight);
     }
     if ('horizontal' === options.center || 'both' === options.center) {
       css.left = availableWidth / 2 - viewWidth / 2;
