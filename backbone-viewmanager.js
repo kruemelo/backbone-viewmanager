@@ -32,9 +32,14 @@ define([
 
     _.extend(this, Backbone.Events);
 
-    this.$el = options.$el || options.el && $(options.el);
+    if (options.$) {
+      $ = options.$;
+    }
 
-    this.$window = options.$window || window && $(window);
+    this.$ = $;
+    this.$el = options.$el || options.el && this.$options.el;
+    this.window = options.window;
+    this.$window = this.$(this.window);
 
     this.timeWindowResized = 0;
 
@@ -53,6 +58,39 @@ define([
       self.trigger('resize', self.getSizes());
     });
 
+  };
+
+
+  ViewManager.prototype.extendView = function (baseView, extendedViewObj) {
+
+    var vmRef = this, extendedView,
+      tmpFnInit, tmpFnRender;
+
+    if (undefined === extendedViewObj) {
+      extendedViewObj = baseView;
+      baseView = Backbone.View;
+    }
+
+    extendedView = baseView.extend(extendedViewObj);
+
+    tmpFnInit = extendedView.prototype.initialize;
+    extendedView.prototype.initialize = function () {
+      this.viewManager = vmRef;
+      tmpFnInit.apply(this, arguments);
+      this.listenTo(vmRef, 'resize', this.resize);
+    };
+
+    tmpFnRender = extendedView.prototype.render;
+
+    extendedView.prototype.render = function () {
+      if (this.$el) {
+        this.$el.data('vm-view', this);
+      }
+      tmpFnRender.apply(this, arguments);
+      this.trigger('render', this);
+    };
+
+    return extendedView;
   };
 
 
@@ -258,7 +296,7 @@ define([
 
     var self = this,
       attached = view.$el.parent().length !== 0,
-      $viewEl = attached ? view.$el : $(document.createElement('div'));
+      $viewEl = attached ? view.$el : $('<div></div>');
 
     options = options || {};
 
