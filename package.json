@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "backbone view manager",
   "main": "backbone-viewmanager.js",
-  "scripts": {
-    "test": "mocha"
-  },
   "keywords": [
     "backbone",
     "view"

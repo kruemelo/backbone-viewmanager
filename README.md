@@ -10,13 +10,15 @@ API
 Use
 ---
 ```
+// requires: window, jQuery, underscore.js, backbone.js
 
 var vm = new ViewManager({
-  $el: $('body'),
-  $window: $(window)
+  window: window,
+  $: $,
+  $el: $('body', $(window))
 });
 
-var view = Backbone.View.extend({});
+var view = vm.extendView();
 
 vm
   .show(
@@ -34,7 +36,7 @@ Test
 ----
 
 ```
-$ mocha
+$ mocha -R spec ./test/viewManagerTest.js
 ```
 
 License
