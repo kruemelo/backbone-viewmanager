@@ -19,7 +19,7 @@ define([
     var self = this,
       fnCheckWindowResizeEnd = function () {
 
-        var now = new Date().getTime(),
+        var now = Date.now(),
           timedOut = self.timeWindowResized && now >= self.timeWindowResized + 199;
 
         if (timedOut) {
