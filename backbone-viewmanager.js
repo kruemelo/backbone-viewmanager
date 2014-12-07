@@ -1,15 +1,18 @@
 define([
+  // 'module',
   'jquery',
   'underscore',
   'backbone'
+  // 'config'
   ], function (
+    // module,
     $,
     _,
     Backbone
+    // config
   ){
 
   'use strict';
-
 
   var ViewManager = function (options) {
 
@@ -37,7 +40,7 @@ define([
     }
 
     this.$ = $;
-    this.$el = options.$el || options.el && this.$options.el;
+    this.$el = options.$el || options.el && this.$(options.el);
     this.window = options.window;
     this.$window = this.$(this.window);
 
@@ -67,7 +70,7 @@ define([
       tmpFnInit, tmpFnRender;
 
     if (undefined === extendedViewObj) {
-      extendedViewObj = baseView;
+      extendedViewObj = baseView || {};
       baseView = Backbone.View;
     }
 
@@ -77,7 +80,7 @@ define([
     extendedView.prototype.initialize = function () {
       this.viewManager = vmRef;
       tmpFnInit.apply(this, arguments);
-      this.listenTo(vmRef, 'resize', this.resize);
+      // this.listenTo(vmRef, 'resize', this.resize);
     };
 
     tmpFnRender = extendedView.prototype.render;
@@ -121,19 +124,19 @@ define([
         mainBarView = this.getMainBarView(),
         $mainBar = mainBarView ? mainBarView.$('>.mainBarView') : null,   //this.getMainBarView(),
         sizes = {
-          windowWidth: this.$window.innerWidth(),
-          windowHeight: this.$window.innerHeight(),
+          windowWidth: this.window.innerWidth || 0,
+          windowHeight: this.window.innerHeight || 0,
           bodyWidth: $body.innerWidth(),
           bodyHeight: $body.innerHeight(),
           mainBarWidth: $mainBar ? $mainBar.outerWidth() : 0,
           mainBarHeight: $mainBar ? $mainBar.outerHeight() : 0
         };
 
-      sizes.fullscreenWidth = sizes.windowWidth;
-      sizes.fullscreenHeight = sizes.windowHeight;
+      sizes.fullscreenWidth = sizes.windowWidth || 0;
+      sizes.fullscreenHeight = sizes.windowHeight || 0;
 
-      sizes.availableWidth = sizes.fullscreenWidth;
-      sizes.availableHeight = sizes.fullscreenHeight - sizes.mainBarHeight;
+      sizes.availableWidth = sizes.fullscreenWidth || 0;
+      sizes.availableHeight = (sizes.fullscreenHeight - sizes.mainBarHeight) || sizes.fullscreenHeight;
 
       return sizes;
   };
@@ -156,11 +159,11 @@ define([
 
     var self = this;
 
-    this.$el.find('.vm-view-parent.vm-fullscreen').each(function (index, viewEl) {
+    _.each(this.$el.find('.vm-view-parent.vm-fullscreen'), function (viewEl) {
       self.resizeView($(viewEl));
     });
 
-    this.$el.find('.vm-view-parent.vm-fill').each(function (index, viewEl) {
+    _.each(this.$el.find('.vm-view-parent.vm-fill'), function (viewEl) {
       self.resizeView($(viewEl));
     });
 
@@ -172,7 +175,7 @@ define([
 
     var self = this;
 
-    this.$el.find('.vm-view-parent.vm-centered').each(function (index, viewEl) {
+    _.each(this.$el.find('.vm-view-parent.vm-centered'), function (viewEl) {
       self.positionView($(viewEl));
     });
 
@@ -182,12 +185,11 @@ define([
 
   ViewManager.prototype.getMaxZIndex = function (forViewEl) {
 
-    var views = this.$el.find('.vm-view-parent'),
-      zIndex,
+    var zIndex,
       maxZIndex = 0,
       $viewEl;
 
-    views.each(function (index, viewEl) {
+    _.each(this.$el.find('.vm-view-parent'), function (viewEl) {
       $viewEl = $(viewEl);
       zIndex = parseInt($viewEl.css('z-index'), 10) || 0;
       if (zIndex > maxZIndex && viewEl !== forViewEl) {
@@ -201,13 +203,12 @@ define([
 
   ViewManager.prototype.getTopModalViewEl = function (forViewEl) {
 
-    var views = this.$el.find('.vm-view-parent.vm-modal'),
-      zIndex,
+    var zIndex,
       maxZIndex = 0,
       $viewEl,
       topModalViewEl;
 
-    views.each(function (index, viewEl) {
+    _.each(this.$el.find('.vm-view-parent.vm-modal'), function (viewEl) {
       $viewEl = $(viewEl);
       zIndex = parseInt($viewEl.css('z-index'), 10) || 0;
       if (zIndex > maxZIndex && viewEl !== forViewEl) {
@@ -238,7 +239,7 @@ define([
     var $modalLayer = $(this.$el.find('.vm-modal-layer')[0]);
 
     if (0 === $modalLayer.length) {
-      $modalLayer = $(document.createElement('div'))
+      $modalLayer = $('<div></div>')
         .addClass('vm-modal-layer')
         .css({
           position: 'fixed',
@@ -375,6 +376,7 @@ define([
   ViewManager.prototype.resizeView = function ($viewEl) {
 
     var options = $viewEl.data('vm-options') || {},
+      view = $viewEl.data('vm-view'),
       sizes = this.getSizes(),
       css;
 
@@ -403,6 +405,9 @@ define([
 
     if (css) {
       $viewEl.css(css);
+      if (view) {
+        view.trigger('resize', sizes);
+      }
 window.console.log(
   'ViewManager.resizeView(): ',
   $viewEl.get(0).firstChild && $viewEl.get(0).firstChild.className || $viewEl
