@@ -1,4 +1,4 @@
-
+// mocha test/viewManagerTest.js -R spec
 var path = require('path');
 var assert = require('assert');
 var util = require('util');
@@ -29,7 +29,7 @@ var window = jsdom.jsdom().parentWindow;
 console.log('window size: ', window.innerWidth, window.innerHeight);
 
 var $ = require('jquery')(window);
-window.$ = $;
+window.$ = window.jQuery = $;
 
 var Backbone = requirejs('backbone');
 Backbone.$ = $;
@@ -70,7 +70,7 @@ describe("viewmanager", function () {
     assert.strictEqual(typeof vm, 'object', 'should be type of object');
     assert(vm.$window, 'should have option $window value set');
     assert(vm.$el, 'should have option $el value set');
-
+    assert(vm.$el.get(0), 'should have option $el.get(0) HTMLElement set');
   });
 
   it('should extend a view', function (done) {
@@ -121,6 +121,12 @@ describe("viewmanager", function () {
     var amdView = new AMDView();
     assert.equal(amdView.bla, 42);
     done();
+  });
+
+
+  it('should manage a container element', function () {
+    vm.$el.get(0).innerHTML = '<div class="container"></div>'; // .html('<div class="container"></div>');
+    console.log(vm.$el.html());
   });
 
 
