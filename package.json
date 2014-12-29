@@ -1,6 +1,6 @@
 {
   "name": "backbone-viewmanager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "backbone view manager",
   "main": "backbone-viewmanager.js",
   "keywords": ["backbone", "view"],
