@@ -36,7 +36,7 @@ Test
 ----
 
 ```
-$ mocha -R spec ./test/viewManagerTest.js
+$ grunt mocha_require_phantom
 ```
 
 License

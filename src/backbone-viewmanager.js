@@ -408,10 +408,10 @@ define([
       if (view) {
         view.trigger('resize', sizes);
       }
-window.console.log(
-  'ViewManager.resizeView(): ',
-  $viewEl.get(0).firstChild && $viewEl.get(0).firstChild.className || $viewEl
-);
+// window.console.log(
+//   'ViewManager.resizeView(): ',
+//   $viewEl.get(0).firstChild && $viewEl.get(0).firstChild.className || $viewEl
+// );
     }
 
     return this;
