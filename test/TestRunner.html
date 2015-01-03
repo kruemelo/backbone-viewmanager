@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <title> Tests </title>
+        <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+    </head>
+    <body>
+        <div id="mocha"></div>
+        <script src="../node_modules/mocha/mocha.js"></script>
+        <script src="../node_modules/chai/chai.js"></script>
+        <script src="libs/require.js"></script>
+        <script>
+            mocha.ui('bdd');
+            mocha.reporter('spec');
+            var assert = chai.assert;
+            // var expect = chai.expect;
+        </script>
+        <script src="./viewManagerTest.js"></script>
+        <script>
+          if (window.mochaPhantomJS) {
+            // console.log('mochaPhantomJS')
+            mochaPhantomJS.run();
+          }
+          else {
+            mocha.run();
+          }
+        </script>
+    </body>
+</html>

@@ -35,8 +35,30 @@ vm
 Test
 ----
 
+requires phantomjs ("^1.9.13") and mocha-phantomjs ("^3.5.2") installed:
+
 ```
-$ grunt mocha_require_phantom
+sudo npm install -g phantomjs
+sudo npm install -g mocha-phantomjs
+sudo npm install
+```
+
+run test:
+
+```
+$ grunt test
+```
+
+Build
+----
+target dir: build/
+
+```
+$ grunt build
+```
+or
+```
+$ grunt
 ```
 
 License

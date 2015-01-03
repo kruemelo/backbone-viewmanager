@@ -1,17 +1,24 @@
 {
   "name": "backbone-viewmanager",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "backbone view manager",
   "main": "backbone-viewmanager.js",
-  "keywords": ["backbone", "view"],
+  "keywords": [
+    "backbone",
+    "view"
+  ],
   "author": "kruemelo",
   "license": "WTFPL",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kruemelo/backbone-viewmanager.git"
+  },
   "devDependencies": {
     "chai": "^1.10.0",
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-contrib-uglify": "^0.7.0",
-    "grunt-mocha-require-phantom": "^0.3.1"
+    "mocha": "^2.1.0"
   },
   "dependencies": {
     "backbone": "^1.1.2",

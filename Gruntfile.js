@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -18,27 +18,31 @@ module.exports = function(grunt) {
                 src: 'src/<%= pkg.name %>.js',
                 dest: 'build/<%= pkg.name %>.min.js'
             }
-        },
-        mocha_require_phantom: {
-            options: {
-                base: 'test',
-                main: 'main.js',
-                requireLib: 'libs/require.js',
-                files: [
-                    'viewManagerTest.js',
-                    // './**/*.js'
-                ],
-            },
-            target: {
-            },
-        },
+        }
     });
 
     // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-mocha-require-phantom');
     grunt.loadNpmTasks('grunt-contrib-jshint');
 
+    grunt.registerTask('mocha-phantomjs', 'mocha phantomjs tests.', function () {
+        var done = this.async();
+
+        require('child_process').exec('mocha-phantomjs test/TestRunner.html', function (error, stdout, stderr) {
+            if (error) {
+                grunt.log.error(stdout);
+                grunt.fail.warn(error);
+            }
+            else {
+                grunt.log.ok(stdout);
+            }
+            done();
+        });
+    });
+    grunt.registerTask('test', ['jshint', 'mocha-phantomjs']);
+    grunt.registerTask('build', ['test', 'uglify']);
+
     // Default task(s).
-    grunt.registerTask('default', ['jshint', 'mocha_require_phantom', 'uglify']);
+    grunt.registerTask('default', ['build']);
+
 };

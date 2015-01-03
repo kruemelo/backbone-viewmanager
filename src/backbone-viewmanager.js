@@ -230,6 +230,7 @@ define([
     if (true === options.modal) {
       this.showModal(view.$el);
     }
+
     return this;
   };
 
