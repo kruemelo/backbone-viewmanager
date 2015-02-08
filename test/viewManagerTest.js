@@ -134,4 +134,28 @@ describe('BackboneViewmanager', function () {
     vm.trigger('windowResizeEnd');
   });
 
+  it('should show a wait view', function (done) {
+    var View = vm.extendView(),
+      view = new View(),
+      $vmWaitView;
+
+    // start wait view
+    view.waitView();
+
+    $vmWaitView = view.$('.vm-waitView');
+
+    assert($vmWaitView.length, 'should contain a wait element');
+    assert(view.$el.hasClass('vm-waiting'), 'view should have class "vm-waiting"');
+    assert(parseInt($vmWaitView.css('z-index'), 10) > 0, 'wait-view element should have z-index > 0');
+
+    // resume view
+    view.resumeView();
+    $vmWaitView = view.$('.vm-waitView');
+
+    assert(!$vmWaitView.length, 'should not contain a wait element');
+    assert(!view.$el.hasClass('vm-waiting'));
+
+    done();
+  });
+
 });

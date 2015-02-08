@@ -93,6 +93,26 @@ define([
       this.trigger('render', this);
     };
 
+    extendedView.prototype.waitView = function () {
+
+      var $vmWaitView = this.$('.vm-waitView'),
+        $viewEl = this.$el,
+        viewElZIndex = parseInt($viewEl.css('z-index'), 10) || 0;
+
+      $viewEl.addClass('vm-waiting');
+
+      if (!$vmWaitView.length) {
+        $vmWaitView = $('<div class="vm-waitView"></div>').appendTo($viewEl);
+      }
+
+      $vmWaitView.css('z-index', viewElZIndex + 1);
+    };
+
+    extendedView.prototype.resumeView = function () {
+      this.$('.vm-waitView').remove();
+      this.$el.removeClass('vm-waiting');
+    };
+
     return extendedView;
   };
 
