@@ -1,5 +1,5 @@
 /*global assert */
-/*global console */
+/* //global console */
 describe('BackboneViewmanager', function () {
 
   var $, _, Backbone,
@@ -7,7 +7,7 @@ describe('BackboneViewmanager', function () {
 
   before(function (done) {
 
-    console.log('before..');
+    // console.log('before..');
 
     require.config({
         paths: {
@@ -52,19 +52,24 @@ describe('BackboneViewmanager', function () {
 
   it('should extend a view', function (done) {
 
-    var BaseView = vm.extendView({
-      // initialize: function(options) {
-      //   console.log('base initialize()', inspect(options));
-      // },
-      render: function () {
-        this.$el.html(this.$el.html() + 'BaseView');
-        return this;
+    var initializedBase,
+      initializedExtended,
+      BaseView = vm.extendView({
+        initialize: function () {
+          initializedBase = true;
+        },
+        render: function () {
+          this.$el.html(this.$el.html() + 'BaseView');
+          return this;
+        }
       }
-    });
+    );
 
     var ExtendedView = vm.extendView(BaseView, {
-      // initialize: function (options) {
-      // },
+      initialize: function () {
+        initializedExtended = true;
+        BaseView.prototype.initialize.apply(this, arguments);
+      },
       render: function () {
         this.$el.html(this.$el.html() + 'ExtendedView');
         BaseView.prototype.render.apply(this, arguments);
@@ -83,9 +88,11 @@ describe('BackboneViewmanager', function () {
       assert(renderedView);
       // console.log('rendered ' + called + 'x times', stacktrace());
       if (2 === called) {
-        assert.strictEqual(view.viewManager, vm, 'should have set view manager ref when called super.initialize');
+        assert(initializedBase, 'should have initialized base');
+        assert(initializedExtended, 'should have initialized extended');
+        assert.strictEqual(view.viewManager, vm, 'should have set view manager ref when extended');
         assert.deepEqual(view.$el.data('vm-view'), view, '$el should have stored a reference to the view');
-        assert.strictEqual(view.$el.html(), 'ExtendedViewBaseView', 'should have called super.render in valid order');
+        assert.strictEqual(view.$el.html(), 'ExtendedViewBaseView', 'should have called BaseView.render in valid order');
         // console.log('innerHTML: "' + window.document.querySelector('body').innerHTML + '"', view.el.innerHTML);
         done();
       }

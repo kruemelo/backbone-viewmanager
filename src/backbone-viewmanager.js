@@ -99,7 +99,7 @@ define([
 
   ViewManager.prototype.getMainBarView = function () {
     var $mainBarViewEl = this.$el.find('.vm-view-parent>.mainBarView');
-    return $mainBarViewEl.length ? $mainBarViewEl.parent().data('view') : null;
+    return $mainBarViewEl.length ? $mainBarViewEl.parent().data('vm-view') : null;
   };
 
 
@@ -227,6 +227,7 @@ define([
       options = view.$el.data('vm-options') || {};
 
     view.$el.css('z-index', maxZIndex + 2);
+
     if (true === options.modal) {
       this.showModal(view.$el);
     }
@@ -306,8 +307,7 @@ define([
 
     $viewEl
       .data('vm-options', options)
-      .addClass('vm-view-parent')
-    ;
+      .addClass('vm-view-parent');
 
     if (options.fill) {
       $viewEl
