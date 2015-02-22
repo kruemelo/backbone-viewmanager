@@ -7,8 +7,6 @@ describe('BackboneViewmanager', function () {
 
   before(function (done) {
 
-    // console.log('before..');
-
     require.config({
         paths: {
             jquery: 'libs/jquery',
@@ -23,15 +21,6 @@ describe('BackboneViewmanager', function () {
         _ = underscore;
         Backbone = backbone;
         BackboneViewmanager = bbvm;
-
-        define('config', [], function () {
-          return {
-            getViewManager: function () {
-              return vm;
-            }
-          };
-        });
-
         done();
     });
 
