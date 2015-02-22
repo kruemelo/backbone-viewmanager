@@ -1,15 +1,11 @@
 define([
-  // 'module',
   'jquery',
   'underscore',
   'backbone'
-  // 'config'
   ], function (
-    // module,
     $,
     _,
     Backbone
-    // config
   ){
 
   'use strict';
@@ -66,31 +62,43 @@ define([
 
   ViewManager.prototype.extendView = function (baseView, extendedViewObj) {
 
-    var vmRef = this, extendedView,
-      tmpFnInit, tmpFnRender;
+    var vmRef = this, extendedView;
+      // tmpFnInit, tmpFnRender;
 
     if (undefined === extendedViewObj) {
       extendedViewObj = baseView || {};
       baseView = Backbone.View;
     }
 
+    if (undefined === extendedViewObj.prototype) {
+      extendedViewObj = baseView.extend(extendedViewObj);
+    }
+
     extendedView = baseView.extend(extendedViewObj);
 
-    tmpFnInit = extendedView.prototype.initialize;
+    _.each(extendedViewObj.prototype, function (fn, k) {
+      if (['constructor', 'initialize', 'render'].indexOf(k) < 0) {
+        extendedView.prototype[k] = fn;
+      }
+    });
+
+    // tmpFnInit = extendedView.prototype.initialize;
     extendedView.prototype.initialize = function () {
       this.viewManager = vmRef;
-      tmpFnInit.apply(this, arguments);
-      // this.listenTo(vmRef, 'resize', this.resize);
+      /*jshint browser: true*/
+      // window.console.log(extendedViewObj.prototype);
+      return extendedViewObj.prototype.initialize.apply(this, arguments);
     };
 
-    tmpFnRender = extendedView.prototype.render;
+    // tmpFnRender = extendedView.prototype.render;
 
     extendedView.prototype.render = function () {
       if (this.$el) {
         this.$el.data('vm-view', this);
       }
-      tmpFnRender.apply(this, arguments);
+      var renderResult = extendedViewObj.prototype.render.apply(this, arguments);
       this.trigger('render', this);
+      return renderResult;
     };
 
     extendedView.prototype.waitView = function () {
@@ -106,19 +114,22 @@ define([
       }
 
       $vmWaitView.css('z-index', viewElZIndex + 1);
+
+      return this;
     };
 
     extendedView.prototype.resumeView = function () {
       this.$('.vm-waitView').remove();
       this.$el.removeClass('vm-waiting');
+      return this;
     };
 
     return extendedView;
   };
 
-
+  // main bar view selector: .vm-mainBarView
   ViewManager.prototype.getMainBarView = function () {
-    var $mainBarViewEl = this.$el.find('.vm-view-parent>.mainBarView');
+    var $mainBarViewEl = this.$el.find('.vm-view-parent>.vm-mainBarView');
     return $mainBarViewEl.length ? $mainBarViewEl.parent().data('vm-view') : null;
   };
 
@@ -142,7 +153,7 @@ define([
   ViewManager.prototype.getSizes = function () {
       var $body = $('body'),
         mainBarView = this.getMainBarView(),
-        $mainBar = mainBarView ? mainBarView.$('>.mainBarView') : null,   //this.getMainBarView(),
+        $mainBar = mainBarView ? mainBarView.$('>.vm-mainBarView') : null,   //this.getMainBarView(),
         sizes = {
           windowWidth: this.window.innerWidth || 0,
           windowHeight: this.window.innerHeight || 0,

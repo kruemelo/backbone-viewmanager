@@ -12,7 +12,7 @@ module.exports = function (grunt) {
         },
         uglify: {
             options: {
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+                banner: '/*! <%= pkg.name %>@<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
             build: {
                 src: 'src/<%= pkg.name %>.js',
@@ -27,7 +27,6 @@ module.exports = function (grunt) {
 
     grunt.registerTask('mocha-phantomjs', 'mocha phantomjs tests.', function () {
         var done = this.async();
-
         require('child_process').exec('mocha-phantomjs test/TestRunner.html', function (error, stdout, stderr) {
             if (error) {
                 grunt.log.error(stdout);

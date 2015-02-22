@@ -12,17 +12,10 @@
             mocha.ui('bdd');
             mocha.reporter('spec');
             var assert = chai.assert;
-            // var expect = chai.expect;
         </script>
-        <script src="./viewManagerTest.js"></script>
+        <script src="./viewManagerTest.js" type="text/javascript" charset="utf8"></script>
         <script>
-          if (window.mochaPhantomJS) {
-            // console.log('mochaPhantomJS')
             mochaPhantomJS.run();
-          }
-          else {
-            mocha.run();
-          }
         </script>
     </body>
 </html>

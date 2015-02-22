@@ -1,14 +1,12 @@
 
-define(['module', 'config'], function (module, config) {
+define(['backbone'], function (Backbone) {
 
   'use strict';
 
-  // return module.config().getViewManager().extendView({
-  //   bla: 42
-  // });
-
-  return config.getViewManager().extendView({
+  var AMDView = Backbone.View.extend({
     bla: 42
   });
+
+  return AMDView;
 
 });
