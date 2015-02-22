@@ -18,7 +18,7 @@ var vm = new ViewManager({
   $el: $('body', $(window))
 });
 
-var view = vm.extendView();
+var view = ViewManager.extendView();
 
 vm
   .show(
