@@ -43,7 +43,7 @@ describe('BackboneViewmanager', function () {
 
     var initializedBase,
       initializedExtended,
-      BaseView = vm.extendView({
+      BaseView = BackboneViewmanager.extendView({
         initialize: function () {
           initializedBase = true;
         },
@@ -54,7 +54,7 @@ describe('BackboneViewmanager', function () {
       }
     );
 
-    var ExtendedView = vm.extendView(BaseView, {
+    var ExtendedView = BackboneViewmanager.extendView(BaseView, {
       initialize: function () {
         initializedExtended = true;
         BaseView.prototype.initialize.apply(this, arguments);
@@ -79,7 +79,6 @@ describe('BackboneViewmanager', function () {
       if (2 === called) {
         assert(initializedBase, 'should have initialized base');
         assert(initializedExtended, 'should have initialized extended');
-        assert.strictEqual(view.viewManager, vm, 'should have set view manager ref when extended');
         assert.deepEqual(view.$el.data('vm-view'), view, '$el should have stored a reference to the view');
         assert.strictEqual(view.$el.html(), 'ExtendedViewBaseView', 'should have called BaseView.render in valid order');
         // console.log('innerHTML: "' + window.document.querySelector('body').innerHTML + '"', view.el.innerHTML);
@@ -99,15 +98,9 @@ describe('BackboneViewmanager', function () {
     });
   });
 
-  // it('should manage a container element', function () {
-  //   var htm = '<div class="container"></div>';
-  //   vm.$el.html(htm);
-  //   assert.equal(vm.$el.html(), htm);
-  // });
-
   it('should trigger resize events to views', function (done) {
     var view,
-      View = vm.extendView({
+      View = BackboneViewmanager.extendView({
         // initialize: function (options) {
         initialize: function () {
           this.listenTo(vm, 'resize', this.resize);
@@ -124,7 +117,7 @@ describe('BackboneViewmanager', function () {
   });
 
   it('should show a wait view', function (done) {
-    var View = vm.extendView(),
+    var View = BackboneViewmanager.extendView(),
       view = new View(),
       $vmWaitView;
 

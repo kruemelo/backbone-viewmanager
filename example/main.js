@@ -39,10 +39,18 @@ require([
           /* global window */
           viewManager = new ViewManager({window: window, $: $, $el: $el});
 
-          exampleView = new (viewManager.extendView(ExampleView))();
+          exampleView = new ExampleView();
 
-          ExampleView2 = viewManager.extendView({
+          ExampleView2 = ViewManager.extendView({
             clicked: 0,
+            // initialize: function (options) {
+            initialize: function () {
+              this.listenTo(viewManager, 'resize', this.resize);
+            },
+            resize: function (sizes) {
+              /*jshint browser: true*/
+              window.console.log(sizes);
+            },
             events: {
               'click button': function () {
                 ++this.clicked;

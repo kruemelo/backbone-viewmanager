@@ -1,18 +1,8 @@
-define(['backbone'], function (Backbone) {
+define(['viewManager'], function (BackboneViewManager) {
 
   'use strict';
 
-  var ExampleView = Backbone.View.extend({
-
-    // initialize: function (options) {
-    initialize: function () {
-      this.listenTo(this.viewManager, 'resize', this.resize);
-    },
-
-    resize: function (sizes) {
-      /*jshint browser: true*/
-      window.console.log(sizes);
-    },
+  var ExampleView = BackboneViewManager.extendView({
 
     render: function () {
 

@@ -60,10 +60,9 @@ define([
   };
 
 
-  ViewManager.prototype.extendView = function (baseView, extendedViewObj) {
+  ViewManager.extendView = function (baseView, extendedViewObj) {
 
-    var vmRef = this, extendedView;
-      // tmpFnInit, tmpFnRender;
+    var extendedView;
 
     if (undefined === extendedViewObj) {
       extendedViewObj = baseView || {};
@@ -77,20 +76,10 @@ define([
     extendedView = baseView.extend(extendedViewObj);
 
     _.each(extendedViewObj.prototype, function (fn, k) {
-      if (['constructor', 'initialize', 'render'].indexOf(k) < 0) {
+      if (['constructor', 'render'].indexOf(k) < 0) {
         extendedView.prototype[k] = fn;
       }
     });
-
-    // tmpFnInit = extendedView.prototype.initialize;
-    extendedView.prototype.initialize = function () {
-      this.viewManager = vmRef;
-      /*jshint browser: true*/
-      // window.console.log(extendedViewObj.prototype);
-      return extendedViewObj.prototype.initialize.apply(this, arguments);
-    };
-
-    // tmpFnRender = extendedView.prototype.render;
 
     extendedView.prototype.render = function () {
       if (this.$el) {

@@ -1,9 +1,9 @@
 
-define(['backbone'], function (Backbone) {
+define(['../src/backbone-viewmanager'], function (BackboneViewManager) {
 
   'use strict';
 
-  var AMDView = Backbone.View.extend({
+  var AMDView = BackboneViewManager.extendView({
     bla: 42
   });
 
