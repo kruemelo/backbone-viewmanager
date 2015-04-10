@@ -67,6 +67,14 @@ require([
             el: '.example-view-2-container'
           });
 
+          exampleView2.on('render', function () {
+            exampleView.render();
+          });
+
+          viewManager.on('resize', function () {
+            exampleView.render();
+          });
+
           viewManager
             .show(exampleView)
             .show(exampleView2)

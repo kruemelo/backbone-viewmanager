@@ -39,9 +39,9 @@ module.exports = function (grunt) {
         });
     });
     grunt.registerTask('test', ['jshint', 'mocha-phantomjs']);
-    grunt.registerTask('build', ['test', 'uglify']);
+    grunt.registerTask('build', ['uglify']);
 
     // Default task(s).
-    grunt.registerTask('default', ['build']);
+    grunt.registerTask('default', ['test', 'build']);
 
 };

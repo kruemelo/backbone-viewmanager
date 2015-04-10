@@ -3,7 +3,10 @@
 describe('BackboneViewmanager', function () {
 
   var $, _, Backbone,
-    BackboneViewmanager, vm;
+    BackboneViewmanager,
+    vm,
+    ViewClass,
+    $rootEl;
 
   before(function (done) {
 
@@ -21,16 +24,42 @@ describe('BackboneViewmanager', function () {
         _ = underscore;
         Backbone = backbone;
         BackboneViewmanager = bbvm;
+
+        $rootEl = $('#mocha');
+
+        ViewClass = BackboneViewmanager.extendView({
+          initialize: function (options) {
+            this.model = new Backbone.Model({
+              name: options.name,
+              clicked: false
+            });
+            this.listenTo(this.model, 'change', this.render);
+          },
+          events: {
+            'click .btn': function () {
+              this.model.set('clicked', this.model.get('name'));
+            }
+          },
+          render: function () {
+            this.$el.html('<div class="btn">' + this.model.get('name') + '</div>');
+            return this;
+          }
+        });
+
         done();
     });
 
+  });
+
+  beforeEach(function () {
+    $rootEl.empty();
   });
 
   it('should initialize', function () {
     vm = new BackboneViewmanager({
         /*global window */
         window: window,
-        $el: $('body')
+        $el: $rootEl
       });
     assert.strictEqual(typeof vm, 'object', 'should be type of object');
     assert(vm.$window, 'should have option $window value set');
@@ -51,8 +80,7 @@ describe('BackboneViewmanager', function () {
           this.$el.html(this.$el.html() + 'BaseView');
           return this;
         }
-      }
-    );
+      });
 
     var ExtendedView = BackboneViewmanager.extendView(BaseView, {
       initialize: function () {
@@ -87,6 +115,49 @@ describe('BackboneViewmanager', function () {
     });
     vm.show(view);
     // view.render();
+  });
+
+  it('should render different view instances', function (done) {
+
+    var view1 = new ViewClass({name: 'view1'}),
+      view2 = new ViewClass({name: 'view2'});
+
+    view1.render();
+
+    view1.on('render', function () {
+      // console.log('rendered: ' + this.$el.html(), 'model: ' + JSON.stringify(this.model.attributes));
+      assert.strictEqual(this.model.get('name'), 'view1');
+      assert.strictEqual(this.model.get('clicked'), 'view1');
+      assert.strictEqual(this.$el.html(), '<div class="btn">view1</div>');
+      view2.render();
+    });
+
+    view2.on('render', function () {
+      // console.log('rendered: ' + this.$el.html(), 'model: ' + JSON.stringify(this.model.attributes));
+      assert.strictEqual(this.model.get('name'), 'view2');
+      assert.strictEqual(this.model.get('clicked'), false);
+      assert.strictEqual(this.$el.html(), '<div class="btn">view2</div>');
+      done();
+    });
+
+    view1.$('.btn').trigger('click');
+
+  });
+
+  it('should use correct render event handler', function (done) {
+
+    var view3 = new ViewClass({name: 'view3'});
+
+    view3.on('render', function () {
+      // console.log('rendered: ' + this.$el.html(), 'model: ' + JSON.stringify(this.model.attributes));
+      assert.strictEqual(this.model.get('name'), 'view3');
+      assert.strictEqual(this.model.get('clicked'), false);
+      assert.strictEqual(this.$el.html(), '<div class="btn">view3</div>');
+
+      done();
+    });
+
+    view3.render();
   });
 
   it('should extend an amd view', function (done) {
