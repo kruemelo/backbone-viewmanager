@@ -164,11 +164,12 @@ define([
 
   ViewManager.prototype.resizeModalLayer = function () {
 
-    var $modalLayer = this.getModalLayer();
+    var $modalLayer = this.getModalLayer(),
+      sizes = this.getSizes();
 
     $modalLayer.css({
       width: this.$window.innerWidth(),
-      height: this.$window.innerHeight()
+      height: this.$window.innerHeight() - sizes.mainBarHeight
     });
 
     return this;
@@ -258,7 +259,8 @@ define([
 
   ViewManager.prototype.getModalLayer = function () {
 
-    var $modalLayer = $(this.$el.find('.vm-modal-layer')[0]);
+    var $modalLayer = $(this.$el.find('.vm-modal-layer')[0]),
+      sizes = this.getSizes();
 
     if (0 === $modalLayer.length) {
       $modalLayer = $('<div></div>')
@@ -266,7 +268,7 @@ define([
         .css({
           position: 'fixed',
           display: 'none',
-          top: 0,
+          top: 0 + sizes.mainBarHeight,
           left: 0,
           'z-index': 0
         })
