@@ -67,7 +67,7 @@ require([
             el: '.example-view-2-container'
           });
 
-          exampleView2.on('render', function () {
+          exampleView2.on('vm-render', function () {
             exampleView.render();
           });
 

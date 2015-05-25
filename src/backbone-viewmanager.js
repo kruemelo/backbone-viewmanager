@@ -86,7 +86,7 @@ define([
         this.$el.data('vm-view', this);
       }
       var renderResult = extendedViewObj.prototype.render.apply(this, arguments);
-      this.trigger('render', this);
+      this.trigger('vm-render', this);
       return renderResult;
     };
 
@@ -334,7 +334,7 @@ define([
     if (options.fill) {
       $viewEl
         .addClass('vm-fill');
-      view.on('render', function () {
+      view.on('vm-render', function () {
         self.resizeView($viewEl);
       }, this);
     }
@@ -355,7 +355,7 @@ define([
           position: options.position ? options.position : 'fixed'
         });
 
-      view.on('render', function () {
+      view.on('vm-render', function () {
         self.positionView($viewEl);
       }, this);
 
@@ -366,7 +366,7 @@ define([
 
     if (true === options.modal) {
       $viewEl.addClass('vm-modal');
-      view.on('render', function () {
+      view.on('vm-render', function () {
         self.showModal($viewEl);
       }, this);
       view.once('close', function () {

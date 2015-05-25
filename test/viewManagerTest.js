@@ -100,7 +100,7 @@ describe('BackboneViewmanager', function () {
 
     var called = 0;
 
-    view.on('render', function (renderedView) {
+    view.on('vm-render', function (renderedView) {
       ++called;
       assert(renderedView);
       // console.log('rendered ' + called + 'x times', stacktrace());
@@ -124,7 +124,7 @@ describe('BackboneViewmanager', function () {
 
     view1.render();
 
-    view1.on('render', function () {
+    view1.on('vm-render', function () {
       // console.log('rendered: ' + this.$el.html(), 'model: ' + JSON.stringify(this.model.attributes));
       assert.strictEqual(this.model.get('name'), 'view1');
       assert.strictEqual(this.model.get('clicked'), 'view1');
@@ -132,7 +132,7 @@ describe('BackboneViewmanager', function () {
       view2.render();
     });
 
-    view2.on('render', function () {
+    view2.on('vm-render', function () {
       // console.log('rendered: ' + this.$el.html(), 'model: ' + JSON.stringify(this.model.attributes));
       assert.strictEqual(this.model.get('name'), 'view2');
       assert.strictEqual(this.model.get('clicked'), false);
@@ -144,11 +144,11 @@ describe('BackboneViewmanager', function () {
 
   });
 
-  it('should use correct render event handler', function (done) {
+  it('should use correct vm-render event handler', function (done) {
 
     var view3 = new ViewClass({name: 'view3'});
 
-    view3.on('render', function () {
+    view3.on('vm-render', function () {
       // console.log('rendered: ' + this.$el.html(), 'model: ' + JSON.stringify(this.model.attributes));
       assert.strictEqual(this.model.get('name'), 'view3');
       assert.strictEqual(this.model.get('clicked'), false);
