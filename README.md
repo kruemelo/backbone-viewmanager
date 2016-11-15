@@ -3,6 +3,8 @@ backbone-viewmanager
 
 AMD module to manage backbone views
 
+### discontinued
+
 API
 ---
 
